@@ -324,7 +324,7 @@ export default function App() {
               </h4>
               <ol className="list-decimal list-inside opacity-70 space-y-2 font-sans leading-relaxed">
                 <li>Extract the downloaded <strong className="text-[#141414]">.zip</strong> file to a folder.</li>
-                <li>Open Chrome and navigate to <strong className="bg-[#141414] bg-opacity-10 px-1 py-0.5 rounded text-[#141414]">chrome://extensions/</strong></li>
+                <li>Open Chrome and navigate to <strong className="bg-[#141414] text-[#E4E3E0] px-1.5 py-0.5 rounded font-mono text-xs">chrome://extensions/</strong></li>
                 <li>Toggle <strong className="text-[#141414]">Developer mode</strong> (top right).</li>
                 <li>Click <strong className="text-[#141414]">Load unpacked</strong> and select the extracted folder.</li>
               </ol>
