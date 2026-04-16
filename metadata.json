@@ -1,0 +1,6 @@
+{
+  "name": "YT Music Metadata Finder",
+  "description": "A Chrome user script (Tampermonkey) that detects and marks YouTube videos featuring the 'Music in this video' metadata box with a green tick in search results.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
