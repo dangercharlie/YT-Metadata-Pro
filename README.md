@@ -58,7 +58,7 @@ YT Metadata Pro is not a copyright oracle.
 - It does not perform audio fingerprinting
 - It does not download videos or audio
 - It does not bypass YouTube limits, permissions, or platform controls
-- It does not treat missing metadata as proof that a track is safe
+- It does not treat missing metadata as proof that a track is safe from copyright or other forms of audio fingerprinting elsewhere, especially outside of Content ID
 
 No badge means:
 
@@ -72,33 +72,53 @@ It does **not** mean:
 
 ## Installation
 
-### Load Unpacked For Testing
+There are two simple ways to install or test YT Metadata Pro locally.
+
+### Path 1: Manual Download / Load Unpacked
 
 1. Clone or download this repo.
-2. Open Chrome and go to:
+2. If you downloaded a ZIP from GitHub, extract it first.
+3. Open Chrome and go to:
 
    ```text
    chrome://extensions/
    ```
 
-3. Enable **Developer mode**.
-4. Click **Load unpacked**.
-5. Select the `extension/` folder.
-6. Open the extension popup.
-7. Paste your own YouTube Data API v3 key.
-8. Reload any open YouTube tabs.
+4. Enable **Developer mode**.
+5. Click **Load unpacked**.
+6. Select the `extension/` folder.
+7. Open the extension popup.
+8. Paste your own YouTube Data API v3 key.
+9. Reload any open YouTube tabs.
 
-### Build A ZIP
+### Path 2: Build A ZIP Package
 
-```bash
-npm run zip
-```
+1. Clone this repo.
+2. Run:
 
-The ZIP is written to:
+   ```bash
+   npm run zip
+   ```
 
-```text
-dist/YT_Metadata_Pro_Extension.zip
-```
+3. The ZIP is written to:
+
+   ```text
+   dist/YT_Metadata_Pro_Extension.zip
+   ```
+
+4. Extract the generated ZIP.
+5. Open Chrome and go to:
+
+   ```text
+   chrome://extensions/
+   ```
+
+6. Enable **Developer mode**.
+7. Click **Load unpacked**.
+8. Select the extracted ZIP folder.
+9. Open the extension popup.
+10. Paste your own YouTube Data API v3 key.
+11. Reload any open YouTube tabs.
 
 ---
 
@@ -121,6 +141,14 @@ Do not commit API keys or paste them into issues, pull requests, screenshots, or
 ## Development
 
 This repo is intentionally plain.
+
+YT Metadata Pro was created as a small browser-extension experiment using AI-assisted development and human review. The goal was to turn a narrow product idea into something testable quickly:
+
+> Badge YouTube search/results thumbnails when YouTube's own metadata says a video contains licensed content.
+
+The first working version came from a generated React/Vite wrapper that built the extension as downloadable string templates. After the core behavior was proven, the project was simplified into a direct Chrome extension package so the code in the repo is the same code Chrome loads.
+
+That simplicity is intentional. The extension should stay easy to inspect, load unpacked, debug in Chrome, and package as a ZIP without needing a custom backend or app shell.
 
 The extension lives in:
 
@@ -208,4 +236,11 @@ Tested manually with a local YouTube Data API key on YouTube search/results page
 
 ## License
 
-MIT
+YT Metadata Pro is released under the MIT License.
+
+---
+
+## Support
+
+If you find YT Metadata Pro useful, consider buying me a coffee!
+☕️ [Buy Me A Coffee](https://ko-fi.com/dangercharlie)
