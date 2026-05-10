@@ -1,8 +1,10 @@
 <p align="center">
   <a href="https://github.com/dangercharlie/YT-Metadata-Pro"><img src="https://img.shields.io/badge/Chrome-Extension-4285F4?style=flat&logo=googlechrome&logoColor=white" alt="Chrome Extension" /></a>
   <a href="https://github.com/dangercharlie/YT-Metadata-Pro"><img src="https://img.shields.io/badge/YouTube_Data_API-v3-FF0000?style=flat&logo=youtube&logoColor=white" alt="YouTube Data API v3" /></a>
+  <a href="https://github.com/dangercharlie/YT-Metadata-Pro/releases/latest"><img src="https://img.shields.io/github/v/release/dangercharlie/YT-Metadata-Pro?style=flat&label=Release" alt="Latest release" /></a>
   <a href="https://github.com/dangercharlie/YT-Metadata-Pro"><img src="https://img.shields.io/badge/Telemetry-None-238636?style=flat" alt="Telemetry" /></a>
   <br/>
+  <a href="https://github.com/dangercharlie/YT-Metadata-Pro/actions/workflows/validate-extension.yml"><img src="https://github.com/dangercharlie/YT-Metadata-Pro/actions/workflows/validate-extension.yml/badge.svg" alt="Validate Extension workflow" /></a>
   <a href="https://github.com/dangercharlie/YT-Metadata-Pro"><img src="https://img.shields.io/badge/API_Key-Local_Only-238636?style=flat&logo=lock&logoColor=white" alt="API key stored locally" /></a>
   <a href="https://github.com/dangercharlie/YT-Metadata-Pro"><img src="https://img.shields.io/badge/Status-Manual_Tested-007EC6?style=flat" alt="Manual tested" /></a>
   <a href="https://github.com/dangercharlie/YT-Metadata-Pro"><img src="https://img.shields.io/badge/Vibe_Coded-Human_Reviewed-007EC6?style=flat" alt="Vibe coded, human reviewed" /></a>
@@ -206,6 +208,16 @@ Useful log meanings:
 - `Lookup complete ... licensed=0` can still mean the extension is working.
 - `Lookup failed` usually means API key, quota, or API enablement needs checking.
 - No logs usually means Chrome has not injected the content script into that tab yet.
+
+---
+
+## Known Limitations
+
+- Search/results pages are the tested scope for the current release.
+- YouTube can change its page structure, which may require content-script selector updates.
+- API key setup, YouTube Data API enablement, quota, or regional API behavior can affect lookup results.
+- The extension only checks YouTube's `licensedContent` metadata signal.
+- No badge means the video was not flagged by this metadata path; it does not mean the audio is safe to reuse.
 
 ---
 
