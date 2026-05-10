@@ -1,20 +1,45 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# YT Metadata Pro
 
-# Run and deploy your AI Studio app
+YT Metadata Pro is a simple Chrome extension that badges visible YouTube thumbnails when the YouTube Data API reports `contentDetails.licensedContent === true`.
 
-This contains everything you need to run your app locally.
+It is intentionally packaged as a plain extension repo. There is no generated React/Vite wrapper and no Google AI Studio dependency.
 
-View your app in AI Studio: https://ai.studio/apps/8c4fc88e-81bb-466e-a2d4-45ab9b2a71d6
+## Local Testing
 
-## Run Locally
+1. Run validation:
 
-**Prerequisites:**  Node.js
+   ```bash
+   npm run validate:extension
+   ```
 
+2. Load the extension in Chrome:
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+   ```text
+   chrome://extensions/
+   ```
+
+3. Enable Developer mode.
+4. Click Load unpacked.
+5. Select the `extension/` folder.
+6. Open the extension popup and save your own YouTube Data API v3 key.
+7. Visit a YouTube search/results page and check for thumbnail badges.
+
+Do not commit API keys or paste them into issues, pull requests, or chat.
+
+## Build A ZIP
+
+```bash
+npm run zip
+```
+
+The ZIP is written to:
+
+```text
+dist/YT_Metadata_Pro_Extension.zip
+```
+
+## Scripts
+
+- `npm run validate:extension` checks `extension/manifest.json`, required extension files, and the Content ID Scout lookup markers.
+- `npm run lint` currently aliases the extension validator.
+- `npm run zip` validates the extension and creates a ZIP package.

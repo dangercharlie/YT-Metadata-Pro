@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "YT Metadata Pro",
+  "version": "1.0",
+  "description": "Highlights licensed music on YouTube",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://youtube.googleapis.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
