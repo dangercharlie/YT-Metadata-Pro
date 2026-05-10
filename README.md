@@ -12,13 +12,13 @@
 
 # YT Metadata Pro
 
-**YT Metadata Pro** is a lightweight Chrome extension for spotting YouTube videos that YouTube already marks as licensed content.
+**YT Metadata Pro** is a lightweight Chrome extension that saves you from opening every YouTube result just to check whether YouTube already marks it as licensed content.
+
+It brings one useful metadata signal directly onto YouTube search/results pages: when the YouTube Data API reports `contentDetails.licensedContent === true`, the extension adds a clear green **MUSIC** badge to the thumbnail.
 
 The core workflow is simple:
 
 > Browse YouTube -> detect visible video IDs -> check YouTube metadata -> badge likely music matches
-
-It uses the YouTube Data API v3 `contentDetails.licensedContent` signal to add a clear green **MUSIC** badge to matching search and results thumbnails.
 
 <p align="center">
   <img src="screenshots/music-badge-example.png" width="700" alt="YT Metadata Pro showing a green MUSIC badge on a YouTube search result thumbnail." />
