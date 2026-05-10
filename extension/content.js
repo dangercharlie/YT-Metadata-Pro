@@ -37,6 +37,7 @@
         if (batchQueue.length === 0) return;
 
         const idsToFetch = batchQueue.splice(0, 50);
+        console.debug('[YT-Metadata-Pro] Checking visible video IDs:', idsToFetch);
 
         chrome.runtime.sendMessage({ videoIds: idsToFetch }, (response) => {
             if (chrome.runtime.lastError) {
@@ -45,6 +46,17 @@
             }
 
             if (!response || !response.licensedIds) return;
+            if (response.error) {
+                console.warn('[YT-Metadata-Pro] Lookup failed:', response.error);
+                return;
+            }
+
+            console.debug(
+                '[YT-Metadata-Pro] Lookup complete:',
+                'checked=' + (response.checkedCount ?? idsToFetch.length),
+                'returned=' + (response.returnedCount ?? 'unknown'),
+                'licensed=' + response.licensedIds.length
+            );
 
             response.licensedIds.forEach(id => {
                 licensedMusicIds.add(id);

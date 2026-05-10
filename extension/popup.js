@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     saveBtn.addEventListener('click', () => {
         const key = input.value.trim();
         chrome.storage.local.set({ ytApiKey: key }, () => {
-            status.textContent = 'API KEY SAVED & ACTIVE!';
-            setTimeout(() => status.textContent = '', 2000);
+            status.textContent = 'API KEY SAVED. RELOAD YOUTUBE TABS.';
+            setTimeout(() => status.textContent = '', 4000);
         });
     });
 });

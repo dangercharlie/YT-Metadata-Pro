@@ -9,16 +9,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 return;
             }
 
-            const url = 'https://youtube.googleapis.com/youtube/v3/videos?part=contentDetails&id=' + message.videoIds.join(',') + '&key=' + API_KEY;
+            const url = 'https://youtube.googleapis.com/youtube/v3/videos?part=contentDetails&id=' + message.videoIds.join(',') + '&key=' + encodeURIComponent(API_KEY);
 
             fetch(url)
-                .then(res => {
-                    if (!res.ok) throw new Error('API Request rejected');
+                .then(async res => {
+                    if (!res.ok) {
+                        let apiMessage = res.statusText || 'API request rejected';
+                        try {
+                            const data = await res.json();
+                            apiMessage = data?.error?.message || apiMessage;
+                        } catch (error) {}
+
+                        throw new Error('YouTube API rejected request (' + res.status + '): ' + apiMessage);
+                    }
+
                     return res.json();
                 })
                 .then(data => {
                     if (!data || !data.items) {
-                        sendResponse({ licensedIds: [] });
+                        sendResponse({ licensedIds: [], checkedCount: message.videoIds.length, returnedCount: 0 });
                         return;
                     }
 
@@ -29,11 +38,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                         }
                     });
 
-                    sendResponse({ licensedIds });
+                    sendResponse({
+                        licensedIds,
+                        checkedCount: message.videoIds.length,
+                        returnedCount: data.items.length
+                    });
                 })
                 .catch(error => {
-                    console.error('[YT-Metadata-Pro Background] YouTube API Error: ', error);
-                    sendResponse({ licensedIds: [] });
+                    const message = String(error?.message || error || 'Unknown API error').replace(API_KEY, '[redacted]');
+                    console.error('[YT-Metadata-Pro Background] YouTube API Error: ', message);
+                    sendResponse({ licensedIds: [], error: message });
                 });
         });
 
