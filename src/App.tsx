@@ -8,7 +8,7 @@ import { CheckCircle2, Github, Download, Archive } from "lucide-react";
 import JSZip from "jszip";
 
 const EXTENSION_MANIFEST = `{
-  "manifest_version": 3,: 3,
+  "manifest_version": 3,
   "name": "YT Metadata Pro",
   "version": "1.0",
   "description": "Highlights licensed music on YouTube",
