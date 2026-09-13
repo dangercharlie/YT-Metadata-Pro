@@ -6,3 +6,12 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Local-only audio corpus (third-party copyrighted audio; never commit).
+# The manifest is documentation and IS tracked; the audio itself is not.
+corpus/*
+!corpus/MANIFEST.md
+*.m4a
+*.mp3
+*.opus
+*.webm
