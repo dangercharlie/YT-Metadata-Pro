@@ -1,38 +1,49 @@
-# ⚠️ Archived: v1 — `licensedContent` signal (superseded)
+# Archived: v1 — the first attempt
 
-**Do not install this.** It is kept for reference and history only.
+**Retired. Not maintained. Do not install.**
 
-This is the original extension. It badged YouTube results with a green **MUSIC** label based on
-the YouTube Data API field `contentDetails.licensedContent`.
+This is the original version of YT Metadata Pro. It is kept so the history and the reasoning
+stay legible — the correction is the interesting part.
 
-## Why it was retired
+## What it did
 
-That field does **not** mean "this audio has been fingerprinted / identified as a registered
-work". Per [Google's own docs](https://developers.google.com/youtube/v3/docs/videos) it means:
+It badged YouTube search results with a green **MUSIC** label based on the YouTube Data API
+field `contentDetails.licensedContent`, and required each user to supply their own YouTube
+Data API v3 key.
+
+## Why it was wrong
+
+That field does not mean "this audio has been identified as a registered work". Per
+[Google's own documentation](https://developers.google.com/youtube/v3/docs/videos) it means:
 
 > the content was uploaded to a channel linked to a YouTube content partner and then claimed
 > by that partner.
 
-It is a property of the **uploading channel**, not of the audio. Measured consequences
-(499 videos sampled against the live API):
+It is a property of the **uploading channel**, not of the audio. Measured against the live API
+across 499 videos, the badge:
 
 | Problem | Measured |
 |---|---|
-| Non-music false positives | **66%** of flagged videos were not in the Music category — the badge printed `MUSIC` on news, sports and education videos |
-| Missed target content | **86%** of vinyl-rip/remix results were not flagged (29/200) |
-| Proved false negatives | 4 vinyl rips with YouTube's own "Song credits" panel (artist/album/writers) all returned `licensedContent: false` |
+| Non-music false positives | **66%** of flagged videos were not in the Music category — `MUSIC` appeared on news, sport and education videos |
+| Missed target content | **86%** of vinyl-rip and remix results were not flagged (29/200) |
+| Proved false negatives | 4 vinyl rips showing YouTube's own song-credits panel (artist, album, writers) all returned `licensedContent: false` |
 
-It also required every user to create a Google Cloud project and supply their own API key.
+It also required every user to create a Google Cloud project and paste in an API key, and had
+several implementation bugs around YouTube's recycled DOM nodes — stale badges on the wrong
+video, and thumbnails that were never checked at all.
 
 ## What replaced it
 
-The current `extension/` directory uses YouTube's **song-credits panel** — the signal that
-actually appears when YouTube has identified a registered work. It needs no API key.
+The current extension reads YouTube's **song-credits panel** — the signal that actually
+appears when a recording has been identified. It needs no API key and one `storage`
+permission.
 
-See the repository root `README.md` for the current extension, `AUDIT.md` for the full
-investigation, and `FEASIBILITY.md` for the measured comparison.
+- Current extension: [`../../extension/`](../../extension/)
+- Main README: [`../../README.md`](../../README.md)
+- Full investigation: [`../../AUDIT.md`](../../AUDIT.md) and [`../../FEASIBILITY.md`](../../FEASIBILITY.md)
 
 ## Status
 
-Kept only so the history and the diff are legible. The manifest still declares the old
-`MUSIC` badge behaviour, so loading it will produce incorrect labels on non-music content.
+The `v1.0.0` release has been withdrawn. The source is retained for reference only. The
+manifest still declares the old `MUSIC` badge behaviour, so loading it will produce
+incorrect labels on non-music content.

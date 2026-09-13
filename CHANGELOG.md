@@ -1,63 +1,58 @@
 # Changelog
 
-## 2.0.0 — identified-upload signal
+## 2.0.0 — the working release
 
-**Breaking change.** The badge now means something different, because the previous signal
-turned out not to mean what the extension claimed.
+The first version of this extension that does what it claims to do. It supersedes
+`v1.0.0`, which has been retired.
 
-### Changed
+### The signal
 
-- **Signal replaced.** The extension no longer reads the YouTube Data API field
-  `contentDetails.licensedContent`. It now reads YouTube's own **song-credits / music panel**,
-  which is what actually appears when YouTube has identified an upload as a registered work.
-- **Badge text** changed from `MUSIC` to `IDENTIFIED`. The tooltip shows the matched song,
-  artist and album.
-- **No API key required.** The old design needed every user to create a Google Cloud project
-  and paste a YouTube Data API v3 key. That is gone, along with the key-storage UI.
-- **`host_permissions` removed.** The content script fetches same-origin, so the permission was
-  unused. Permissions are now just `storage`.
-- **Packaging.** The extension ships from `extension/`. v1 is archived under
-  `archive/extension-v1-licensed-content/` for reference only.
+v1 read `contentDetails.licensedContent` from the YouTube Data API and badged matches with
+`MUSIC`. That field means *"uploaded to a channel linked to a YouTube content partner"* — a
+property of the channel, not the audio — so it did not answer the question the extension
+existed to answer.
 
-### Why
+Measured against the live API across 499 videos, the v1 badge:
 
-`licensedContent` means *"uploaded to a channel linked to a YouTube content partner"* — a
-property of the channel, not of the audio. Measured against the live API on 499 videos:
+- fired on **66% non-music** content (news, sport, education)
+- **missed 86%** of vinyl-rip and remix results (29/200)
+- returned `false` on four vinyl rips that YouTube's own song-credits panel had matched,
+  with artist, album and writers listed
 
-- **66%** of flagged videos were not in the Music category — the `MUSIC` badge appeared on
-  news, sports and education videos.
-- **86%** of vinyl-rip and remix results were not flagged (29/200).
-- Four vinyl rips that showed YouTube's own "Song credits" panel — with artist, album and
-  writers — all returned `licensedContent: false`.
+v2 reads YouTube's **song-credits / music panel** — the signal that actually appears when a
+recording has been identified as a registered work.
 
-In effect the old badge indicated "large publisher channel", not "identified music".
+### User-facing changes
 
-### Fixed
+- Badge is now **`IDENTIFIED`** instead of `MUSIC`, with the matched song, artist and album
+  in the tooltip.
+- **No API key required.** v1 required every user to create a Google Cloud project and paste a
+  YouTube Data API v3 key. That requirement is gone, along with the key-storage UI.
+- Permissions reduced to a single `storage`. `host_permissions` was removed as unused — the
+  content script fetches same-origin, verified both ways against live YouTube.
 
-Bugs reproduced in v1 and fixed here:
+### Fixes to make it functional as intended
 
-- **Stale badges.** YouTube recycles list nodes while scrolling; v1 left a badge attached to a
-  node that had been reused for a different video. Badges are now reconciled against the video
-  a node currently shows.
-- **Permanently missed badges.** A recycled node was never re-checked, and a transient API
-  failure blacklisted the video ID forever. Both now retry with bounded backoff.
-- **Selector collision.** `href*="/watch?v=ID"` is an unanchored substring match; video IDs are
-  now parsed and compared exactly.
-- **Coverage.** v1 only scanned `ytd-thumbnail`. Now also covers `yt-thumbnail-view-model`,
-  `yt-lockup-view-model` and Shorts (`/shorts/<id>`).
-- **Silent failure.** A missing API key produced no badges and no explanation.
+| Problem in v1 | Fix in v2 |
+|---|---|
+| Stale badge left on a thumbnail YouTube had recycled for a different video | Badges reconciled against the video a node currently shows |
+| Recycled thumbnails never re-checked; transient errors blacklisted a video ID permanently | Bounded retry with backoff; failures are never cached |
+| `href*="/watch?v=ID"` substring match could select the wrong video | Video IDs parsed and compared exactly |
+| Only `ytd-thumbnail` was scanned | Covers `yt-thumbnail-view-model`, `yt-lockup-view-model` and Shorts |
+| A missing API key produced no badges and no diagnostic | No key needed; failures surface in the console |
 
 ### Reliability
 
 - Two independent retrieval paths: the innertube `next` endpoint, then the watch-page HTML.
-- Client version is scraped from the page rather than hard-coded.
-- Failures are distinguished from genuine negatives, and are never cached.
+- Client version scraped from the page rather than hard-coded — plausible version strings
+  from 2019–2024 all still work.
+- Failures distinguished from genuine negatives, and never cached.
 - Verified stable at 20 concurrent requests and across 17 regions.
 
 ### Added
 
 - `AUDIT.md` — investigation of the v1 signal, with reproduced bugs.
-- `FEASIBILITY.md` — measured comparison of candidate signals and the release-risk analysis.
+- `FEASIBILITY.md` — measured comparison of candidate signals, plus release-risk analysis.
 - `DISTRIBUTION.md` — Chrome Web Store permissions and GitHub release guidance.
 - `scripts/detect-identified.mjs` — check any video ID from the command line.
 - `scripts/test-identification.mjs` — parser fixture tests (`npm run test:identification`).
@@ -66,13 +61,16 @@ Bugs reproduced in v1 and fixed here:
 
 - Reads an undocumented YouTube endpoint. Best-effort; it fails quietly if YouTube changes it.
 - No badge means YouTube did not surface an identification — not that the audio is safe.
-- Content ID matches recordings, not songs: an official version may be identified while a vinyl
-  pressing or B-side of the same track is not.
+- Content ID matches recordings, not songs: an official release may be identified while a
+  vinyl pressing or B-side of the same track is not.
 
 ---
 
-## 1.0.0
+## 1.0.0 — retired
 
-- Initial release. Badged YouTube search results with a green `MUSIC` label based on
-  `contentDetails.licensedContent`.
-- Required a user-supplied YouTube Data API v3 key.
+The first attempt. Badged YouTube search results with a green `MUSIC` label based on
+`contentDetails.licensedContent`, and required a user-supplied YouTube Data API v3 key.
+
+The release has been withdrawn: it did not flag identified uploads and produced misleading
+labels on non-music content. The source remains archived under
+`archive/extension-v1-licensed-content/` for reference. See `AUDIT.md` for the full analysis.

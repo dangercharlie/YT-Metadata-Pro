@@ -74,20 +74,68 @@ It does **not** mean:
 
 ---
 
-## A note on the previous version (v1)
+## How it works
 
-Versions up to **1.0** used the YouTube Data API field `contentDetails.licensedContent` and
-badged videos with **MUSIC**.
+YouTube already knows which uploads contain music it has identified as a registered work —
+it just buries that answer in a panel you only see after opening the video. This extension
+surfaces it on the thumbnail instead.
 
-That field does **not** mean "this audio has been identified". It means *"uploaded to a
-channel linked to a YouTube content partner"* — a property of the channel, not the audio.
-Measured against the live API, it flagged **66% non-music** content (news, sports, education)
-while missing **86%** of vinyl-rip and remix results. It also required you to create a Google
-Cloud project and supply your own API key.
+When a result scrolls into view, the extension asks YouTube's own page data whether that
+upload carries a song-credits / music panel. If it does, the thumbnail gets a green
+**IDENTIFIED** badge, and hovering it shows the matched song, artist and album.
 
-v2 uses the signal that actually corresponds to identification, and needs no key. The old
-build is kept under [`archive/extension-v1-licensed-content/`](archive/extension-v1-licensed-content/)
-for reference only — **do not install it**. Full investigation: [`AUDIT.md`](AUDIT.md) and
+Two details worth knowing:
+
+- **It reads YouTube's identification, not a legal opinion.** A badge means YouTube matched
+  this upload to a registered work. It is not a statement about your rights to reuse it.
+- **It matches recordings, not songs.** The official release of a track is often identified
+  while a vinyl pressing, B-side, dub or remix of the *same song* is not. In practice that is
+  usually the distinction worth knowing — and it is why this exists.
+
+Results are cached locally, lookups are limited to videos actually on screen, and there is no
+API key, no account, and no server.
+
+---
+
+## A first attempt, and what changed
+
+The first version of this extension (v1, tagged `v1.0.0` and since retired) took a different
+and ultimately wrong approach. It is documented here because the correction is the interesting
+part, not because you need to know it to use the tool.
+
+**v1** read a YouTube Data API field, `contentDetails.licensedContent`, and badged matches with
+**MUSIC**. It also required every user to create a Google Cloud project and paste in their own
+API key.
+
+The problem: that field does not mean "this audio has been identified." It means *"uploaded to
+a channel linked to a YouTube content partner"* — a property of the **channel**, not the audio.
+Measured against the live API across 499 videos, the v1 badge:
+
+- fired on **66% non-music** content — `MUSIC` appeared on news, sport and education videos;
+- **missed 86%** of vinyl-rip and remix results (29 of 200);
+- and returned `false` on four vinyl rips that YouTube's *own* song-credits panel had already
+  matched, with artist, album and writers listed.
+
+So it was closer to a "large publisher channel" indicator wearing a music label.
+
+**What replaced it.** The working approach reads the song-credits panel — the signal that
+actually appears when YouTube identifies a recording. Getting there also meant fixing the
+plumbing around it:
+
+| Problem in v1 | Fix |
+|---|---|
+| Stale badges when YouTube reused a thumbnail for a different video | Badges reconciled against the video a node currently shows |
+| Recycled thumbnails never re-checked; a transient error blacklisted a video forever | Bounded retry with backoff; failures are never cached |
+| Substring URL matching could badge the wrong video | Video IDs parsed and compared exactly |
+| Only one thumbnail element type was scanned | Covers the newer view-model components and Shorts |
+| A missing API key gave no badges and no explanation | No key needed at all |
+
+The current build also has **no API key requirement** and asks for a single `storage`
+permission, so setup is now "load unpacked and reload YouTube."
+
+The v1 source is archived under
+[`archive/extension-v1-licensed-content/`](archive/extension-v1-licensed-content/) for
+reference. The full investigation is in [`AUDIT.md`](AUDIT.md) and
 [`FEASIBILITY.md`](FEASIBILITY.md).
 
 ---
