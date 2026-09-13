@@ -18,3 +18,7 @@ corpus/upload-test/*
 *.mp3
 *.opus
 *.webm
+
+# Private working notes — explicitly NOT for publication or commit.
+PRIVATE-*.md
+private/
