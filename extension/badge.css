@@ -1,0 +1,49 @@
+/* YT Metadata Pro prototype — badge styles. Kept in CSS so it can be swapped. */
+
+.ytid-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  cursor: help;
+  user-select: none;
+  pointer-events: auto;
+}
+
+/* Confirmed: YouTube identified a registered work (song-credits panel present). */
+.ytid-badge--identified {
+  background: #4ade80;
+  color: #06210f;
+}
+
+/* Uncertain: we could not confirm. Deliberately subtle — absence is not proof of safety. */
+.ytid-badge--unknown {
+  background: rgba(20, 20, 20, 0.82);
+  color: #e4e3e0;
+  font-weight: 600;
+}
+
+/* Partner-channel signal from the Data API (optional, off by default). */
+.ytid-badge--partner {
+  background: #60a5fa;
+  color: #06182e;
+}
+
+.ytid-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.85;
+}

@@ -1,12 +1,15 @@
 {
   "name": "yt-metadata-pro-extension",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist",
     "validate:extension": "node scripts/validate-extension-package.mjs",
-    "lint": "npm run validate:extension",
-    "zip": "npm run validate:extension && rm -rf dist && mkdir -p dist && cd extension && zip -r ../dist/YT_Metadata_Pro_Extension.zip ."
+    "test:identification": "node scripts/test-identification.mjs",
+    "lint": "npm run validate:extension && npm run test:identification",
+    "zip": "npm run lint && rm -rf dist && mkdir -p dist && cd extension && zip -X -r ../dist/YT_Metadata_Pro_Extension.zip .",
+    "probe": "node scripts/probe-licensed-content.mjs",
+    "detect": "node scripts/detect-identified.mjs"
   }
 }

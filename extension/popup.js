@@ -1,19 +1,23 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const input = document.getElementById('apiKey');
-    const saveBtn = document.getElementById('saveBtn');
-    const status = document.getElementById('status');
+document.addEventListener("DOMContentLoaded", () => {
+  const totalEl = document.getElementById("total");
+  const identifiedEl = document.getElementById("identified");
+  const clearBtn = document.getElementById("clear");
 
-    chrome.storage.local.get(['ytApiKey'], (result) => {
-        if (result.ytApiKey) {
-            input.value = result.ytApiKey;
-        }
+  function refresh() {
+    chrome.runtime.sendMessage({ type: "cacheStats" }, (res) => {
+      if (!res?.ok) return;
+      totalEl.textContent = String(res.total);
+      identifiedEl.textContent = String(res.identified);
     });
+  }
 
-    saveBtn.addEventListener('click', () => {
-        const key = input.value.trim();
-        chrome.storage.local.set({ ytApiKey: key }, () => {
-            status.textContent = 'API KEY SAVED. RELOAD YOUTUBE TABS.';
-            setTimeout(() => status.textContent = '', 4000);
-        });
+  clearBtn.addEventListener("click", () => {
+    chrome.runtime.sendMessage({ type: "clearCache" }, () => {
+      refresh();
+      clearBtn.textContent = "Cleared — reload YouTube tabs";
+      setTimeout(() => (clearBtn.textContent = "Clear cache & re-check"), 3000);
     });
+  });
+
+  refresh();
 });

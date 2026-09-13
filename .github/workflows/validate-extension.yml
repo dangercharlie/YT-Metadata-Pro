@@ -27,6 +27,9 @@ jobs:
       - name: Validate extension files
         run: npm run validate:extension
 
+      - name: Run parser fixture tests
+        run: npm run test:identification
+
       - name: Run lint alias
         run: npm run lint
 
@@ -35,3 +38,6 @@ jobs:
 
       - name: Inspect ZIP contents
         run: unzip -l dist/YT_Metadata_Pro_Extension.zip
+
+      - name: Report artifact hash
+        run: shasum -a 256 dist/YT_Metadata_Pro_Extension.zip

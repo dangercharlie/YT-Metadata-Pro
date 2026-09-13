@@ -10,6 +10,7 @@ const requiredFiles = [
   "content.js",
   "popup.html",
   "popup.js",
+  "badge.css",
 ];
 
 for (const filename of requiredFiles) {
@@ -40,20 +41,45 @@ if (!contentScriptFiles.includes("content.js")) {
 }
 
 if (!manifest.permissions?.includes("storage")) {
-  throw new Error("manifest.json must request storage permission for the API key.");
+  throw new Error("manifest.json must request storage permission for the local cache.");
 }
 
-if (!manifest.host_permissions?.includes("https://youtube.googleapis.com/*")) {
-  throw new Error("manifest.json must include the YouTube Data API host permission.");
+// The identification signal is fetched same-origin from the content script, so
+// host_permissions is NOT required. Requesting it would be an unused permission,
+// which the Chrome Web Store treats as a single-purpose violation.
+if (manifest.host_permissions !== undefined && manifest.host_permissions.length > 0) {
+  throw new Error(
+    "manifest.json must not request host_permissions: the content script fetches same-origin and the permission would be unused."
+  );
 }
 
+// The v1 `licensedContent` design is retired. Guard against it creeping back: that field
+// reflects the uploading channel, not whether YouTube identified the recording.
 const backgroundContent = fs.readFileSync(path.join(extensionPath, "background.js"), "utf8");
-if (!backgroundContent.includes("videos?part=contentDetails")) {
-  throw new Error("background.js must request YouTube video contentDetails.");
+if (backgroundContent.includes("licensedContent")) {
+  throw new Error(
+    "background.js must not use the retired licensedContent signal (it means 'partner channel', not 'identified')."
+  );
 }
 
-if (!backgroundContent.includes("contentDetails?.licensedContent === true")) {
-  throw new Error("background.js must check contentDetails.licensedContent.");
+// The current signal: YouTube's song-credits dialog / Music panel, read from the page.
+const contentContent = fs.readFileSync(path.join(extensionPath, "content.js"), "utf8");
+if (!contentContent.includes("dialogMessages")) {
+  throw new Error("content.js must parse the song-credits dialogMessages payload.");
+}
+if (!contentContent.includes("/youtubei/v1/next")) {
+  throw new Error("content.js must request the innertube next endpoint.");
+}
+if (!contentContent.includes("/watch?v=")) {
+  throw new Error("content.js must retain the watch-page fallback path.");
+}
+
+// Scope check: the extension must stay on YouTube.
+const matches = manifest.content_scripts?.flatMap((script) => script.matches ?? []) ?? [];
+for (const pattern of matches) {
+  if (!pattern.includes("youtube.com")) {
+    throw new Error(`manifest.json content script scope must stay on youtube.com, found: ${pattern}`);
+  }
 }
 
 console.log("Extension package validation passed.");
