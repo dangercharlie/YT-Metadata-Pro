@@ -127,8 +127,6 @@ Replacing the signal also meant fixing the plumbing around it:
 | Only one thumbnail element type was scanned | Covers the newer view-model components and Shorts |
 | A missing API key gave no badges and no explanation | No key needed at all |
 
-Full write-up: [`docs/HOW-WE-GOT-HERE.md`](docs/HOW-WE-GOT-HERE.md).
-
 </details>
 
 ---
@@ -241,11 +239,7 @@ npm run lint     # validate package + parser fixture tests
 npm run zip      # build dist/YT_Metadata_Pro_Extension.zip
 ```
 
-Background reading, if you want the reasoning behind the signal:
-
-- [`docs/HOW-WE-GOT-HERE.md`](docs/HOW-WE-GOT-HERE.md) — why v1 was retired, with evidence
-- [`docs/SIGNAL-RESEARCH.md`](docs/SIGNAL-RESEARCH.md) — measured comparison of candidate signals
-- [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) — Chrome Web Store permissions and release notes
+Packaging and release notes: [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md)
 
 ---
 
