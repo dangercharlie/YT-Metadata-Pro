@@ -70,5 +70,5 @@ The first attempt. Badged YouTube search results with a green `MUSIC` label base
 `contentDetails.licensedContent`, and required a user-supplied YouTube Data API v3 key.
 
 The release has been withdrawn: it did not flag identified uploads and produced misleading
-labels on non-music content. The source remains archived under
-`archive/extension-v1-licensed-content/` for reference.
+labels on non-music content. The source remains browsable at the
+[`v1.0.0` tag](https://github.com/dangercharlie/YT-Metadata-Pro/tree/v1.0.0).

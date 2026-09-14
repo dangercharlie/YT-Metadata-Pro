@@ -6,22 +6,3 @@ coverage/
 *.log
 .env*
 !.env.example
-
-# Local-only corpus: third-party copyrighted audio, plus the research notes
-# describing it. Nothing under corpus/ is published.
-corpus/
-*.m4a
-*.mp3
-*.opus
-*.webm
-
-# Private working notes — explicitly NOT for publication or commit.
-PRIVATE-*.md
-private/
-
-# Research tooling and harnesses — local only. These reference third-party audio
-# and unpublished investigation results, so they are not published.
-scripts/acrcloud-test.mjs
-scripts/compare-providers.mjs
-scripts/probe-licensed-content.mjs
-scripts/extract-corpus.sh

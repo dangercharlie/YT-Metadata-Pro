@@ -84,7 +84,6 @@ extension/             # the shipped extension
 docs/
   DISTRIBUTION.md      # this file
 scripts/               # detector, tests, corpus tooling
-archive/               # retired v1, reference only
 ```
 
 ### Verify the build
