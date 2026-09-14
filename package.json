@@ -9,10 +9,6 @@
     "test:identification": "node scripts/test-identification.mjs",
     "lint": "npm run validate:extension && npm run test:identification",
     "zip": "npm run lint && rm -rf dist && mkdir -p dist && cd extension && zip -X -r ../dist/YT_Metadata_Pro_Extension.zip .",
-    "probe": "node scripts/probe-licensed-content.mjs",
-    "detect": "node scripts/detect-identified.mjs",
-    "corpus": "bash scripts/extract-corpus.sh",
-    "acrcloud": "node scripts/acrcloud-test.mjs",
-    "compare": "node scripts/compare-providers.mjs"
+    "detect": "node scripts/detect-identified.mjs"
   }
 }

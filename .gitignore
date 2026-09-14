@@ -18,3 +18,10 @@ corpus/
 # Private working notes — explicitly NOT for publication or commit.
 PRIVATE-*.md
 private/
+
+# Research tooling and harnesses — local only. These reference third-party audio
+# and unpublished investigation results, so they are not published.
+scripts/acrcloud-test.mjs
+scripts/compare-providers.mjs
+scripts/probe-licensed-content.mjs
+scripts/extract-corpus.sh
