@@ -51,9 +51,9 @@ recording has been identified as a registered work.
 
 ### Added
 
-- `AUDIT.md` — investigation of the v1 signal, with reproduced bugs.
-- `FEASIBILITY.md` — measured comparison of candidate signals, plus release-risk analysis.
-- `DISTRIBUTION.md` — Chrome Web Store permissions and GitHub release guidance.
+- `docs/HOW-WE-GOT-HERE.md` — investigation of the v1 signal, with reproduced bugs.
+- `docs/SIGNAL-RESEARCH.md` — measured comparison of candidate signals, plus release-risk analysis.
+- `docs/DISTRIBUTION.md` — Chrome Web Store permissions and GitHub release guidance.
 - `scripts/detect-identified.mjs` — check any video ID from the command line.
 - `scripts/test-identification.mjs` — parser fixture tests (`npm run test:identification`).
 
@@ -73,4 +73,4 @@ The first attempt. Badged YouTube search results with a green `MUSIC` label base
 
 The release has been withdrawn: it did not flag identified uploads and produced misleading
 labels on non-music content. The source remains archived under
-`archive/extension-v1-licensed-content/` for reference. See `AUDIT.md` for the full analysis.
+`archive/extension-v1-licensed-content/` for reference. See `docs/HOW-WE-GOT-HERE.md` for the full analysis.

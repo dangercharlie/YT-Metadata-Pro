@@ -97,30 +97,27 @@ API key, no account, and no server.
 
 ---
 
-## A first attempt, and what changed
+## A note on v1
 
-The first version of this extension (v1, tagged `v1.0.0` and since retired) took a different
-and ultimately wrong approach. It is documented here because the correction is the interesting
-part, not because you need to know it to use the tool.
+An earlier version (v1, tagged `v1.0.0`, since retired) badged uploads using the YouTube Data
+API field `contentDetails.licensedContent`. That field does not mean "this audio has been
+identified" — it means *"uploaded to a channel linked to a YouTube content partner"*, a
+property of the channel rather than the audio. In practice it flagged a lot of non-music
+content and missed most vinyl rips. It also required every user to supply their own API key.
 
-**v1** read a YouTube Data API field, `contentDetails.licensedContent`, and badged matches with
-**MUSIC**. It also required every user to create a Google Cloud project and paste in their own
-API key.
+This version reads YouTube's own identification instead, and needs no key. The v1 source is
+kept under [`archive/extension-v1-licensed-content/`](archive/extension-v1-licensed-content/)
+for reference only.
 
-The problem: that field does not mean "this audio has been identified." It means *"uploaded to
-a channel linked to a YouTube content partner"* — a property of the **channel**, not the audio.
-Measured against the live API across 499 videos, the v1 badge:
+<details>
+<summary>What changed, and the evidence behind it</summary>
 
-- fired on **66% non-music** content — `MUSIC` appeared on news, sport and education videos;
-- **missed 86%** of vinyl-rip and remix results (29 of 200);
-- and returned `false` on four vinyl rips that YouTube's *own* song-credits panel had already
-  matched, with artist, album and writers listed.
+The retired field was measured against the live API across 499 videos. It fired on **66%
+non-music** content — `MUSIC` appeared on news, sport and education videos — while **missing
+86%** of vinyl-rip and remix results. It also returned `false` on four vinyl rips that
+YouTube's own song-credits panel had already matched.
 
-So it was closer to a "large publisher channel" indicator wearing a music label.
-
-**What replaced it.** The working approach reads the song-credits panel — the signal that
-actually appears when YouTube identifies a recording. Getting there also meant fixing the
-plumbing around it:
+Replacing the signal also meant fixing the plumbing around it:
 
 | Problem in v1 | Fix |
 |---|---|
@@ -130,13 +127,9 @@ plumbing around it:
 | Only one thumbnail element type was scanned | Covers the newer view-model components and Shorts |
 | A missing API key gave no badges and no explanation | No key needed at all |
 
-The current build also has **no API key requirement** and asks for a single `storage`
-permission, so setup is now "load unpacked and reload YouTube."
+Full write-up: [`docs/HOW-WE-GOT-HERE.md`](docs/HOW-WE-GOT-HERE.md).
 
-The v1 source is archived under
-[`archive/extension-v1-licensed-content/`](archive/extension-v1-licensed-content/) for
-reference. The full investigation is in [`AUDIT.md`](AUDIT.md) and
-[`FEASIBILITY.md`](FEASIBILITY.md).
+</details>
 
 ---
 
@@ -225,7 +218,8 @@ If badges do not appear:
 
 ## Development
 
-The extension lives in `extension/` and is plain MV3:
+The extension lives in `extension/` and is plain MV3 — no build step, no bundler, no
+dependencies:
 
 ```text
 extension/manifest.json
@@ -236,16 +230,22 @@ extension/popup.js
 extension/badge.css
 ```
 
-Supporting material:
-
-- [`AUDIT.md`](AUDIT.md) — what was wrong with the v1 signal, with reproduced bugs
-- [`FEASIBILITY.md`](FEASIBILITY.md) — measured comparison of candidate signals
-- [`DISTRIBUTION.md`](DISTRIBUTION.md) — Chrome Web Store permissions and release notes
-- `scripts/detect-identified.mjs` — check any video ID from the command line
+Check any video from the command line:
 
 ```bash
 node scripts/detect-identified.mjs dQw4w9WgXcQ
 ```
+
+```bash
+npm run lint     # validate package + parser fixture tests
+npm run zip      # build dist/YT_Metadata_Pro_Extension.zip
+```
+
+Background reading, if you want the reasoning behind the signal:
+
+- [`docs/HOW-WE-GOT-HERE.md`](docs/HOW-WE-GOT-HERE.md) — why v1 was retired, with evidence
+- [`docs/SIGNAL-RESEARCH.md`](docs/SIGNAL-RESEARCH.md) — measured comparison of candidate signals
+- [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) — Chrome Web Store permissions and release notes
 
 ---
 
