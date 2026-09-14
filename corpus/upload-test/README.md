@@ -1,6 +1,6 @@
 # Upload test set — 4 clips, 30 seconds each
 
-Ready for the Phase 2 upload benchmark (see `../RECOGNITION-PLAN.md` §4).
+Ready for the Phase 2 upload benchmark (see `../docs/RECOGNITION-PLAN.md` §4).
 
 Upload these **unlisted**, wait for checks, read the result in YouTube Studio → Content →
 Checks, then delete. Use a throwaway channel.
@@ -40,7 +40,7 @@ have concluded so far.
 | 4 | News | **Not claimed** |
 
 **Stated prediction, recorded before testing:** #3 comes back unclaimed. My reasoning is in
-`../RECOGNITION-PLAN.md` — these are obscure 1978–85 UK reggae 12" pressings, and the Simba
+`../docs/RECOGNITION-PLAN.md` — these are obscure 1978–85 UK reggae 12" pressings, and the Simba
 "Bubbling" is a different master from the identified official release. If #3 *is* claimed,
 that prediction is falsified and it is the headline result.
 

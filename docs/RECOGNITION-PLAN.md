@@ -1,4 +1,7 @@
-# Plan: third-party recognition testing against Content ID outcomes
+# Recognition investigation — plan and status
+
+**Background reading.** An ongoing side investigation into how YouTube's identification compares
+with third-party recognition services. Not required reading for using the extension.
 
 Status: **planning only — no test uploads, no API spend, nothing executed yet.**
 

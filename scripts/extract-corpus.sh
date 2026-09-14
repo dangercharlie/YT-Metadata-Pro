@@ -15,7 +15,7 @@
 #   which makes it look like a tooling bug rather than throttling).
 #
 #   The audio is third-party copyrighted material. It is kept out of git and must
-#   not be redistributed. See RECOGNITION-PLAN.md.
+#   not be redistributed. See docs/RECOGNITION-PLAN.md.
 #
 # Usage:
 #   ./scripts/extract-corpus.sh              # whole corpus

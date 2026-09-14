@@ -40,7 +40,7 @@ permission.
 
 - Current extension: [`../../extension/`](../../extension/)
 - Main README: [`../../README.md`](../../README.md)
-- Full investigation: [`../../AUDIT.md`](../../AUDIT.md) and [`../../FEASIBILITY.md`](../../FEASIBILITY.md)
+- Full investigation: [`../../docs/HOW-WE-GOT-HERE.md`](../../docs/HOW-WE-GOT-HERE.md) and [`../../docs/SIGNAL-RESEARCH.md`](../../docs/SIGNAL-RESEARCH.md)
 
 ## Status
 

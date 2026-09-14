@@ -57,7 +57,7 @@ All clips verified non-silent (mean volume ≈ −17 to −19 dB).
 
 ## What to expect
 
-My stated prediction (from `RECOGNITION-PLAN.md`, recorded before testing): third-party
+My stated prediction (from `docs/RECOGNITION-PLAN.md`, recorded before testing): third-party
 services will **agree with YouTube on Group A** and **also fail on Group B** — those Aswad
 pressings being obscure 1978–85 UK reggae 12"s unlikely to be in MusicBrainz or a commercial
 recognition database.
