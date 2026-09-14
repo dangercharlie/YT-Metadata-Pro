@@ -81,9 +81,7 @@ that way.
 README.md              # the front door
 CHANGELOG.md
 extension/             # the shipped extension
-docs/                  # background reading
-  HOW-WE-GOT-HERE.md   # why v1 was retired
-  SIGNAL-RESEARCH.md   # why v2 uses a different signal
+docs/
   DISTRIBUTION.md      # this file
 scripts/               # detector, tests, corpus tooling
 archive/               # retired v1, reference only

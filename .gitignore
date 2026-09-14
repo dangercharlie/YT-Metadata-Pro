@@ -7,13 +7,9 @@ coverage/
 .env*
 !.env.example
 
-# Local-only audio corpus (third-party copyrighted audio; never commit).
-# Documentation IS tracked; the audio itself is not.
-corpus/*
-!corpus/MANIFEST.md
-!corpus/upload-test/
-corpus/upload-test/*
-!corpus/upload-test/README.md
+# Local-only corpus: third-party copyrighted audio, plus the research notes
+# describing it. Nothing under corpus/ is published.
+corpus/
 *.m4a
 *.mp3
 *.opus
