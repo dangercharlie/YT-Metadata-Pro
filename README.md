@@ -105,9 +105,10 @@ identified" — it means *"uploaded to a channel linked to a YouTube content par
 property of the channel rather than the audio. In practice it flagged a lot of non-music
 content and missed most vinyl rips. It also required every user to supply their own API key.
 
-This version reads YouTube's own identification instead, and needs no key. The v1 source is
-kept under [`archive/extension-v1-licensed-content/`](archive/extension-v1-licensed-content/)
-for reference only.
+This version reads YouTube's own identification instead, and needs no key. The v1 release has
+been withdrawn; its source remains browsable at the
+[`v1.0.0` tag](https://github.com/dangercharlie/YT-Metadata-Pro/tree/v1.0.0) if you want to see
+the earlier approach.
 
 <details>
 <summary>What changed, and the evidence behind it</summary>
