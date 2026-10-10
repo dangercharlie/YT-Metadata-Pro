@@ -19,11 +19,11 @@ metadata shows the upload has been matched to a registered musical work — incl
 re-uploads, vinyl rips and remixes that are mixed in with already-identified results.
 
 <p align="center">
-  <img src="screenshots/identified-badge-example.png" width="700" alt="YT Metadata Pro showing IDENTIFIED badges on YouTube search results." />
+  <img src="screenshots/search-results.png" width="760" alt="YouTube search results for King Tubby dubplates: a Triston Palma pre-release dubplate with no badge above a King Tubby's Sound System dubplate showcase badged IDENTIFIED with 2 songs." />
 </p>
 
 <p align="center">
-  <em>Genuine capture: two vinyl rips of the same Daft Punk track, both matched by YouTube and badged <strong>IDENTIFIED</strong>.</em>
+  <em>Live capture: a King Tubby's pre-release dubplate YouTube hasn't matched, above a dubplate showcase it has.</em>
 </p>
 
 ---
@@ -44,33 +44,41 @@ you click.
 
 ## What It Does
 
-- Runs as a Chrome extension on YouTube pages
-- Finds video IDs from visible search results and thumbnails
-- Asks YouTube's own page data whether the upload carries a **song-credits / music panel**
-- Adds a green **IDENTIFIED** badge, with the matched song, artist and album in the tooltip
+- Badges search results, the home feed and the watch-page sidebar with a green **IDENTIFIED**
+  label when YouTube's own page data carries a **music / song-credits section** for the upload
+- Also badges the video you're watching, under its title
+- Hover a badge to see every matched song — title, artist, album and writers; click it to copy
+  `Artist – Song` to the clipboard
+- **Dim identified results** (popup toggle) so the uploads YouTube *hasn't* matched stand out
+- Popup shows what's been found on the current page, and lets you pause badges or clear the cache
+- Works in any YouTube display language
 - Caches results locally so repeat lookups are rare
 - Requires **no API key** and **no account**
+
+<p align="center">
+  <img src="screenshots/tooltip.png" width="760" alt="Hovering an IDENTIFIED badge on King Tubby - Dubbing With The Observer [1975] lists the 10 songs YouTube matched, with artists and albums." />
+  <br/><em>Hover a badge to see what YouTube matched; click to copy it.</em>
+</p>
+
+<p align="center">
+  <img src="screenshots/dim-identified.png" width="760" alt="The same search with Dim identified results turned on: the matched upload is faded and the unmatched dubplate stands out." />
+  <br/><em>Dim identified results: the uploads YouTube hasn't matched stand out.</em>
+</p>
+
+<p align="center">
+  <img src="screenshots/watch-page.png" width="520" alt="Watch page for King Tubby - Dubbing With The Observer [1975] with an IDENTIFIED 10 badge under the title." />
+  &nbsp;
+  <img src="screenshots/popup.png" width="230" alt="Extension popup showing counts for the current page (identified, not identified, not checked yet, couldn't check), settings toggles and the cache." />
+  <br/><em>The watch page badge, and the popup with counts for the current page.</em>
+</p>
 
 ---
 
 ## What It Does Not Do
 
-YT Metadata Pro is not a copyright oracle.
-
-- It does not determine legal reuse rights
-- It does not prove a video is safe to sample, remix, upload, monetize, or reuse
 - It does not download videos or audio
 - It does not bypass YouTube limits, permissions, or platform controls
-- It does not consult Content ID claims directly — that data is partner-only
-- **It does not guarantee that "no badge" means "not claimed"**
-
-No badge means:
-
-> YouTube did not surface an identification for this upload.
-
-It does **not** mean:
-
-> Safe to use.
+- It does not read Content ID data directly — that is only available to YouTube's partners
 
 ---
 
@@ -81,19 +89,21 @@ it just buries that answer in a panel you only see after opening the video. This
 surfaces it on the thumbnail instead.
 
 When a result scrolls into view, the extension asks YouTube's own page data whether that
-upload carries a song-credits / music panel. If it does, the thumbnail gets a green
-**IDENTIFIED** badge, and hovering it shows the matched song, artist and album.
+upload has a **Music** section in its description — the list of songs with a "Song credits"
+dialog that YouTube shows once it has matched the audio. If it does, the thumbnail gets a green
+**IDENTIFIED** badge (with a count when there are several songs), and hovering it lists them.
 
-Two details worth knowing:
+One detail worth knowing: **it matches recordings, not songs.** The official release of a
+track is often identified while a vinyl pressing, B-side, dub or remix of the *same song* is
+not. In practice that is usually the distinction worth knowing — and it is why this exists.
 
-- **It reads YouTube's identification, not a legal opinion.** A badge means YouTube matched
-  this upload to a registered work. It is not a statement about your rights to reuse it.
-- **It matches recordings, not songs.** The official release of a track is often identified
-  while a vinyl pressing, B-side, dub or remix of the *same song* is not. In practice that is
-  usually the distinction worth knowing — and it is why this exists.
+<p align="center">
+  <img src="screenshots/identified-badge-example.png" width="700" alt="Two vinyl rips of the same Daft Punk track, both badged IDENTIFIED." />
+  <br/><em>Two vinyl rips of the same Daft Punk track, both matched by YouTube.</em>
+</p>
 
-Results are cached locally, lookups are limited to videos actually on screen, and there is no
-API key, no account, and no server.
+Results are cached locally, lookups are limited to videos on (or about to scroll onto) the
+screen, and there is no API key, no account, and no server.
 
 ---
 
@@ -107,8 +117,9 @@ content and missed most vinyl rips. It also required every user to supply their 
 
 This version reads YouTube's own identification instead, and needs no key. The v1 release has
 been withdrawn; its source remains browsable at the
-[`v1.0.0` tag](https://github.com/dangercharlie/YT-Metadata-Pro/tree/v1.0.0) if you want to see
-the earlier approach.
+[`v1.0.0` tag](https://github.com/dangercharlie/YT-Metadata-Pro/tree/v1.0.0) for reference only.
+**Do not install it** — the README in that tag predates the withdrawal, and loading that build
+produces misleading labels on non-music videos.
 
 <details>
 <summary>What changed, and the evidence behind it</summary>
@@ -172,7 +183,7 @@ shasum -a 256 dist/YT_Metadata_Pro_Extension.zip
 - **No backend.** Nothing is sent to any server operated by this project.
 - **No API key.** Nothing to configure, nothing to leak.
 - **One permission:** `storage`, used for the local identification cache.
-- **One site:** the content script runs only on `youtube.com`.
+- **One site:** the content script runs only on `www.youtube.com`.
 
 The only network requests are to YouTube itself, from your own browser, for public page data.
 
@@ -182,7 +193,7 @@ The only network requests are to YouTube itself, from your own browser, for publ
 
 ```json
 "permissions": ["storage"],
-"content_scripts": [{ "matches": ["*://*.youtube.com/*"] }]
+"content_scripts": [{ "matches": ["https://www.youtube.com/*"] }]
 ```
 
 No `host_permissions`, no `tabs`, no `<all_urls>`. The extension reads YouTube data using
@@ -195,12 +206,15 @@ same-origin requests, so it does not need broad host access.
 - **Best-effort.** The extension reads a YouTube endpoint that is not a documented public API.
   It can change without notice. If it stops working, the extension fails quietly — it will not
   break YouTube pages.
-- **Absence is not proof.** No badge means YouTube did not surface an identification. A claim
-  can in principle exist without the panel appearing.
 - **Content ID matches recordings, not songs.** The official version of a track is often
   identified while a vinyl pressing, B-side or remix of the same song is not. That is expected
   behaviour, not a bug — it is usually the distinction you are looking for.
-- Match data is cached locally for up to 7 days.
+- **Shorts aren't badged.** YouTube doesn't include the music section for Shorts, so there is
+  nothing to read. Playlists, mixes and ads are skipped too.
+- **Desktop site only.** The mobile site (`m.youtube.com`) and YouTube Music aren't covered.
+- If YouTube starts rate-limiting lookups, the extension pauses them for a few minutes rather
+  than retrying, and the popup says so.
+- Identifications are cached locally for up to 7 days, "not identified" results for 6 hours.
 
 ---
 
@@ -210,8 +224,10 @@ If badges do not appear:
 
 1. Reload the extension in `chrome://extensions/`.
 2. Reload any open YouTube tabs.
-3. Open DevTools on YouTube and look for logs beginning with `[YT-Metadata-Pro]`.
-4. Use **Clear cache & re-check** in the extension popup.
+3. Open the extension popup: the **This page** counts show whether videos are being checked,
+   and whether lookups failed or are paused.
+4. Open DevTools on YouTube and look for logs beginning with `[YT-Metadata-Pro]`.
+5. Use **Clear cache & re-check** in the popup — open YouTube tabs re-check what's on screen.
 
 ---
 
@@ -222,9 +238,9 @@ dependencies:
 
 ```text
 extension/manifest.json
-extension/content.js     # detection + badge rendering
-extension/background.js  # cache management
-extension/popup.html
+extension/identify.js    # parses YouTube's response (pure; also used by the tests and CLI)
+extension/content.js     # finds thumbnails, runs lookups, caches, renders badges
+extension/popup.html     # page stats, settings, cache
 extension/popup.js
 extension/badge.css
 ```
@@ -233,6 +249,7 @@ Check any video from the command line:
 
 ```bash
 node scripts/detect-identified.mjs dQw4w9WgXcQ
+node scripts/detect-identified.mjs --hl de dQw4w9WgXcQ   # as a German-language user would see it
 ```
 
 ```bash
