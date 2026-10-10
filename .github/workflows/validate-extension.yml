@@ -30,9 +30,6 @@ jobs:
       - name: Run parser fixture tests
         run: npm run test:identification
 
-      - name: Run lint alias
-        run: npm run lint
-
       - name: Build ZIP package
         run: npm run zip
 

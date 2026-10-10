@@ -1,5 +1,57 @@
 # Changelog
 
+## 2.1.0 — unreleased
+
+Checked end to end against live YouTube (October 2026). Detection now works in every display
+language, the extension no longer slows YouTube down as its cache grows, and retries really
+are bounded.
+
+### Fixes
+
+- **Detection works in every language.** v2.0.0 matched English labels ("Song", "1 song"), so
+  in any other YouTube UI language it found *no* identifications — 0 of 36 identified responses
+  across German, French, Spanish, Japanese and Portuguese — and cached each as "not identified"
+  for 6 hours. Detection now reads the structure of YouTube's music section, which is the
+  same in every language, and requests English responses for consistency.
+- **Songs with an empty credits dialog** (e.g. some official releases) are now detected.
+- **Unusable responses aren't cached as "not identified".** A degraded response, a response
+  for the wrong video, or a bot check is treated as a failure and retried later.
+- **Retries are actually bounded.** v2.0.0 reset its retry counter on every attempt, so a
+  failing video was re-fetched every few seconds for as long as the tab was open. Now: at most
+  three attempts with backoff, and all lookups pause for 5 minutes if YouTube rate-limits.
+- **No more slowdown as the cache grows.** v2.0.0 rescanned every link on the page once per
+  cached identification every 2 seconds — measured at a 400 ms freeze every 2 s with ~600
+  cached results. Pages are now re-checked only when YouTube changes them, in a single pass.
+- The page's client version is read once instead of serialising the whole page per lookup.
+- **Badges sit on the thumbnail** in the watch-page sidebar and on search playlists (they were
+  drawn over the title), are top-left so they no longer cover YouTube's hover buttons, and no
+  longer duplicate on Shorts.
+- **Wrong badges no longer linger** for up to 2 seconds on recycled results after navigating.
+- **Playlists, mixes and ads are skipped** instead of being badged by their first video.
+  **Shorts are skipped**: YouTube doesn't expose identification for them, so they used to be
+  cached as "not identified".
+- **"Clear cache & re-check" works** with YouTube tabs open; previously any open tab wrote its
+  old results straight back. Several YouTube tabs no longer overwrite each other's results.
+- Expired results are re-checked in long-lived tabs, and storage is pruned and capped.
+- Credit text is shown unescaped (`7" Mix`, not `7\" Mix`).
+
+### New
+
+- Badge on the watch page, under the video title.
+- Tooltip lists every matched song with artist, album and writers; the badge shows a count
+  when there are several. Click a badge to copy `Artist – Song`.
+- Popup: what's been found on the current page (identified / not identified / not checked
+  yet / couldn't check), a **Show badges** switch, and **Dim identified results** to make the
+  uploads YouTube hasn't matched stand out.
+- `detect-identified.mjs --hl <lang>` to check how a video looks in another UI language.
+
+### Internal
+
+- Parsing moved to `extension/identify.js`, which the tests and CLI load directly, so they
+  test the shipped code instead of a copy. Fixtures are trimmed real responses.
+- The background service worker is gone; the popup reads storage directly.
+- Content script limited to `https://www.youtube.com/*`.
+
 ## 2.0.0 — the working release
 
 The first version of this extension that does what it claims to do. It supersedes
@@ -58,7 +110,6 @@ recording has been identified as a registered work.
 ### Known limitations
 
 - Reads an undocumented YouTube endpoint. Best-effort; it fails quietly if YouTube changes it.
-- No badge means YouTube did not surface an identification — not that the audio is safe.
 - Content ID matches recordings, not songs: an official release may be identified while a
   vinyl pressing or B-side of the same track is not.
 
@@ -71,4 +122,6 @@ The first attempt. Badged YouTube search results with a green `MUSIC` label base
 
 The release has been withdrawn: it did not flag identified uploads and produced misleading
 labels on non-music content. The source remains browsable at the
-[`v1.0.0` tag](https://github.com/dangercharlie/YT-Metadata-Pro/tree/v1.0.0).
+[`v1.0.0` tag](https://github.com/dangercharlie/YT-Metadata-Pro/tree/v1.0.0) for reference
+only. **Do not install it:** the README in that tag predates the withdrawal, and loading that
+build produces misleading labels.

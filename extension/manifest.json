@@ -1,21 +1,27 @@
 {
   "manifest_version": 3,
   "name": "YT Metadata Pro",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Badges YouTube results that YouTube has identified as a registered musical work.",
-  "background": {
-    "service_worker": "background.js"
-  },
-  "permissions": ["storage"],
+  "permissions": [
+    "storage"
+  ],
   "action": {
     "default_popup": "popup.html"
   },
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*"],
-      "js": ["content.js"],
-      "css": ["badge.css"],
-      "run_at": "document_start"
+      "matches": [
+        "https://www.youtube.com/*"
+      ],
+      "js": [
+        "identify.js",
+        "content.js"
+      ],
+      "css": [
+        "badge.css"
+      ],
+      "run_at": "document_idle"
     }
   ]
 }
