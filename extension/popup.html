@@ -3,33 +3,48 @@
 <head>
   <meta charset="utf-8" />
   <style>
-    body { font-family: monospace; padding: 15px; width: 320px; background: #141414; color: #E4E3E0; }
-    h3 { margin-top: 0; color: #4ade80; text-transform: uppercase; font-weight: bold; }
-    p { font-size: 11px; opacity: 0.8; margin-bottom: 12px; line-height: 1.5; }
-    .row { display: flex; justify-content: space-between; font-size: 12px; margin: 4px 0; }
-    .num { color: #4ade80; font-weight: bold; }
-    button { width: 100%; padding: 8px; background: #4ade80; color: #141414; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; margin-top: 10px; }
-    button:hover { background: #E4E3E0; }
-    .note { font-size: 10px; opacity: 0.6; margin-top: 12px; line-height: 1.5; }
-    .warn { color: #fbbf24; }
+    body { font-family: system-ui, sans-serif; padding: 14px 16px; width: 300px; margin: 0; background: #141414; color: #e4e3e0; font-size: 12px; }
+    h3 { margin: 0 0 4px; color: #4ade80; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; }
+    p { margin: 0 0 10px; line-height: 1.5; opacity: 0.8; }
+    h4 { margin: 14px 0 6px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.55; font-weight: 600; }
+    [hidden] { display: none !important; }
+    .row { display: flex; justify-content: space-between; align-items: center; margin: 4px 0; }
+    .num { color: #4ade80; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .muted { opacity: 0.6; }
+    label.toggle { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 6px 0; cursor: pointer; }
+    label.toggle small { display: block; opacity: 0.6; font-size: 11px; margin-top: 1px; }
+    input[type="checkbox"] { accent-color: #4ade80; width: 15px; height: 15px; flex: none; cursor: pointer; }
+    button { width: 100%; padding: 7px; margin-top: 8px; background: transparent; color: #e4e3e0; border: 1px solid #3a3a3a; border-radius: 4px; cursor: pointer; font: inherit; }
+    button:hover { border-color: #4ade80; color: #4ade80; }
   </style>
 </head>
 <body>
   <h3>YT Metadata Pro</h3>
-  <p>
-    Badges YouTube results that YouTube has already <strong>fingerprinted and identified</strong>
-    as a registered musical work &mdash; including re-uploads and vinyl rips.
-  </p>
-  <div class="row"><span>Videos checked</span><span class="num" id="total">&mdash;</span></div>
-  <div class="row"><span>Identified</span><span class="num" id="identified">&mdash;</span></div>
+  <p>Badges results that YouTube has identified as containing a registered musical work.</p>
+
+  <h4>This page</h4>
+  <div id="page">
+    <div class="row"><span>Identified</span><span class="num" id="page-identified">&mdash;</span></div>
+    <div class="row"><span>Not identified</span><span class="num" id="page-not">&mdash;</span></div>
+    <div class="row"><span>Not checked yet <span class="muted">(off-screen or in progress)</span></span><span class="num" id="page-pending">&mdash;</span></div>
+    <div class="row"><span>Couldn't check</span><span class="num" id="page-failed">&mdash;</span></div>
+    <div class="row muted" id="page-status" hidden></div>
+  </div>
+
+  <h4>Settings</h4>
+  <label class="toggle">
+    <span>Show badges</span>
+    <input type="checkbox" id="enabled" />
+  </label>
+  <label class="toggle">
+    <span>Dim identified results<small>Makes the uploads YouTube hasn't matched stand out</small></span>
+    <input type="checkbox" id="dim" />
+  </label>
+
+  <h4>Cache</h4>
+  <div class="row"><span>Saved results</span><span class="num" id="cache-total">&mdash;</span></div>
   <button id="clear">Clear cache &amp; re-check</button>
-  <p class="note">
-    No API key is required. Results are cached locally; nothing leaves your browser
-    except requests to YouTube itself.
-  </p>
-  <p class="note warn">
-    No badge means "not confirmed identified", not "safe to reuse".
-  </p>
+
   <script src="popup.js"></script>
 </body>
 </html>

@@ -27,7 +27,7 @@ treat as a single-purpose violation.
 ### Store submission checklist
 
 **Manifest / code**
-- [ ] Bump `version` (currently `2.0.0`) — the Store requires a higher version per upload
+- [ ] Bump `version` (currently `2.1.0`) — the Store requires a higher version per upload
 - [ ] Add `icons` (16/32/48/128 PNG)
 - [ ] Confirm no remote code — already clean: no `eval`, `new Function`, `importScripts`
 
@@ -83,7 +83,7 @@ CHANGELOG.md
 extension/             # the shipped extension
 docs/
   DISTRIBUTION.md      # this file
-scripts/               # detector, tests
+scripts/               # validator, parser tests, detection CLI
 ```
 
 ### Verify the build

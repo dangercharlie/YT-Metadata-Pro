@@ -1,49 +1,92 @@
-/* YT Metadata Pro prototype — badge styles. Kept in CSS so it can be swapped. */
+/* YT Metadata Pro — badge, tooltip and dimming styles. */
 
+/* Added to a thumbnail only when it isn't already positioned, so the badge can anchor to it. */
+.ytid-host {
+  position: relative;
+}
+
+/* Top-left: YouTube's own hover buttons (Watch later, Add to queue, ⋮) live on the right. */
 .ytid-badge {
   position: absolute;
-  top: 4px;
-  right: 4px;
-  z-index: 99;
-  display: flex;
+  top: 6px;
+  left: 6px;
+  z-index: 3;
+  display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   padding: 2px 6px;
-  border-radius: 2px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  font-size: 10px;
-  font-weight: bold;
-  line-height: 1.4;
-  letter-spacing: 0.02em;
-  cursor: help;
-  user-select: none;
-  pointer-events: auto;
-}
-
-/* Confirmed: YouTube identified a registered work (song-credits panel present). */
-.ytid-badge--identified {
+  border-radius: 4px;
   background: #4ade80;
   color: #06210f;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+  font: 700 10px/1.4 Roboto, Arial, sans-serif;
+  letter-spacing: 0.04em;
+  cursor: copy;
+  user-select: none;
 }
 
-/* Uncertain: we could not confirm. Deliberately subtle — absence is not proof of safety. */
-.ytid-badge--unknown {
-  background: rgba(20, 20, 20, 0.82);
+.ytid-badge__count {
+  padding: 0 4px;
+  border-radius: 3px;
+  background: rgba(6, 33, 15, 0.18);
+}
+
+/* Watch page: sits under the video title instead of on a thumbnail. */
+.ytid-badge--watch {
+  position: static;
+  margin-top: 8px;
+  font-size: 11px;
+  box-shadow: none;
+}
+
+.ytid-tooltip {
+  position: fixed;
+  z-index: 2147483647;
+  max-width: 340px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: rgba(20, 20, 20, 0.96);
   color: #e4e3e0;
-  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  font: 400 12px/1.45 Roboto, Arial, sans-serif;
+  pointer-events: none;
 }
 
-/* Partner-channel signal from the Data API (optional, off by default). */
-.ytid-badge--partner {
-  background: #60a5fa;
-  color: #06182e;
+.ytid-tooltip[hidden] {
+  display: none;
 }
 
-.ytid-badge__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.85;
+.ytid-tooltip__title {
+  margin-bottom: 4px;
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.ytid-tooltip__row {
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.ytid-tooltip__dim,
+.ytid-tooltip__sub {
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+.ytid-tooltip__foot {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  opacity: 0.55;
+  font-size: 11px;
+}
+
+/* "Dim identified results": push matched uploads back so unmatched ones stand out. */
+.ytid-dim {
+  opacity: 0.35;
+  transition: opacity 0.15s;
+}
+
+.ytid-dim:hover {
+  opacity: 1;
 }
