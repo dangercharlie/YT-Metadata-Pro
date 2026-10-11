@@ -14,9 +14,10 @@
 **YT Metadata Pro** is a lightweight Chrome extension that saves you from opening every
 YouTube result just to find out whether YouTube has already identified the music in it.
 
-It badges YouTube search results with a green **IDENTIFIED** label when YouTube's own
-metadata shows the upload has been matched to a registered musical work — including
-re-uploads, vinyl rips and remixes that are mixed in with already-identified results.
+It badges YouTube results — search, home feed and watch-page sidebar — and the video you're
+watching with a green **IDENTIFIED** label whenever YouTube's own metadata shows the upload
+has been matched to a registered musical work. That includes re-uploads, vinyl rips and
+remixes mixed in with already-identified results.
 
 <p align="center">
   <img src="screenshots/search-results.png" width="760" alt="YouTube search results for King Tubby dubplates: a Triston Palma pre-release dubplate with no badge above a King Tubby's Sound System dubplate showcase badged IDENTIFIED with 2 songs." />
@@ -50,7 +51,7 @@ you click.
 - Hover a badge to see every matched song — title, artist, album and writers; click it to copy
   `Artist – Song` to the clipboard
 - **Dim identified results** (popup toggle) so the uploads YouTube *hasn't* matched stand out
-- Popup shows what's been found on the current page, and lets you pause badges or clear the cache
+- Popup shows what's been found on the current page, and lets you turn badges off or clear the cache
 - Works in any YouTube display language
 - Caches results locally so repeat lookups are rare
 - Requires **no API key** and **no account**
@@ -74,19 +75,12 @@ you click.
 
 ---
 
-## What It Does Not Do
-
-- It does not download videos or audio
-- It does not bypass YouTube limits, permissions, or platform controls
-- It does not read Content ID data directly — that is only available to YouTube's partners
-
----
-
 ## How it works
 
 YouTube already knows which uploads contain music it has identified as a registered work —
 it just buries that answer in a panel you only see after opening the video. This extension
-surfaces it on the thumbnail instead.
+surfaces it on the thumbnail instead. It doesn't read Content ID data directly — that is only
+available to YouTube's partners — it reads what YouTube already shows on the page.
 
 When a result scrolls into view, the extension asks YouTube's own page data whether that
 upload has a **Music** section in its description — the list of songs with a "Song credits"
@@ -99,47 +93,48 @@ not. In practice that is usually the distinction worth knowing — and it is why
 
 <p align="center">
   <img src="screenshots/identified-badge-example.png" width="700" alt="Two vinyl rips of the same Daft Punk track, both badged IDENTIFIED." />
-  <br/><em>Two vinyl rips of the same Daft Punk track, both matched by YouTube.</em>
+  <br/><em>An earlier capture (2.0.0 build): two vinyl rips of the same Daft Punk track, both matched by YouTube.</em>
 </p>
 
-Results are cached locally, lookups are limited to videos on (or about to scroll onto) the
-screen, and there is no API key, no account, and no server.
+Results are cached locally, and lookups are limited to videos on (or about to scroll onto)
+the screen.
 
 ---
 
-## A note on v1
+## A note on previous versions
 
-An earlier version (v1, tagged `v1.0.0`, since retired) badged uploads using the YouTube Data
-API field `contentDetails.licensedContent`. That field does not mean "this audio has been
-identified" — it means *"uploaded to a channel linked to a YouTube content partner"*, a
-property of the channel rather than the audio. In practice it flagged a lot of non-music
-content and missed most vinyl rips. It also required every user to supply their own API key.
+It took a few attempts to get this right.
 
-This version reads YouTube's own identification instead, and needs no key. The v1 release has
-been withdrawn; its source remains browsable at the
-[`v1.0.0` tag](https://github.com/dangercharlie/YT-Metadata-Pro/tree/v1.0.0) for reference only.
-**Do not install it** — the README in that tag predates the withdrawal, and loading that build
-produces misleading labels on non-music videos.
+- **v1.0.0** (retired) used the YouTube Data API field `licensedContent`, which turned out to
+  mean *"uploaded by a partner channel"*, not *"this audio was identified"*. Measured across
+  499 videos, it fired on 66% non-music content and missed 86% of vinyl rips — and it needed
+  every user to supply their own API key.
+- **v2.0.0** read the right signal, YouTube's own song-credits panel, but matched it on English
+  wording. In any other display language it found nothing, it retried failed lookups forever,
+  and it slowed YouTube down as its cache grew.
+- **v2.1.0** (current) reads the structure of YouTube's response rather than its wording, and
+  was checked end to end against live YouTube — search, home, watch page, in-page navigation,
+  popup — before release. Details are in the [CHANGELOG](CHANGELOG.md).
 
-<details>
-<summary>What changed, and the evidence behind it</summary>
+Earlier versions stay browsable at their tags (e.g.
+[`v1.0.0`](https://github.com/dangercharlie/YT-Metadata-Pro/tree/v1.0.0)) for reference only.
+**Don't install them** — their READMEs predate the fixes above.
 
-The retired field was measured against the live API across 499 videos. It fired on **66%
-non-music** content — `MUSIC` appeared on news, sport and education videos — while **missing
-86%** of vinyl-rip and remix results. It also returned `false` on four vinyl rips that
-YouTube's own song-credits panel had already matched.
+**What's least proven.** Testing ran signed out, from one region, in Chrome, with the live
+browser in English (the parser itself was checked against responses in six languages). The
+areas most likely to still have problems:
 
-Replacing the signal also meant fixing the plumbing around it:
+- **Page layouts.** YouTube serves different markup to different accounts and experiments. If
+  your results use markup the extension doesn't recognise, nothing is badged — it fails quietly
+  rather than guessing.
+- **Untested setups.** Signed-in accounts, YouTube Premium, EU consent prompts, and other
+  Chromium browsers (Edge, Brave) haven't been tried.
+- **Rate limiting.** The five-minute pause after repeated failures hasn't been triggered in
+  testing.
 
-| Problem in v1 | Fix |
-|---|---|
-| Stale badges when YouTube reused a thumbnail for a different video | Badges reconciled against the video a node currently shows |
-| Recycled thumbnails never re-checked; a transient error blacklisted a video forever | Bounded retry with backoff; failures are never cached |
-| Substring URL matching could badge the wrong video | Video IDs parsed and compared exactly |
-| Only one thumbnail element type was scanned | Covers the newer view-model components and Shorts |
-| A missing API key gave no badges and no explanation | No key needed at all |
-
-</details>
+If badges don't appear for you, the popup's **This page** counts and the `[YT-Metadata-Pro]`
+console logs show what the extension is seeing — an issue report with those is the most useful
+kind.
 
 ---
 
@@ -153,27 +148,12 @@ extension installed outside the Store.
 2. Open `chrome://extensions/`
 3. Enable **Developer mode** (top right).
 4. Click **Load unpacked**.
-5. Select the `extension/` folder.
+5. Select the extracted folder (or `extension/` if you cloned the repo).
 6. Reload any open YouTube tabs.
 
-There is no API key to configure.
-
-> **Updates are manual.** Unpacked extensions do not auto-update. Re-download or `git pull`
-> to get new versions.
-
----
-
-## Verify the build
-
-The extension is plain JavaScript, CSS and HTML. There is **no build step, no bundler, no
-dependencies and no minification** — the files in the repo are the files Chrome runs, so you
-can read everything that executes.
-
-```bash
-npm run lint          # validates the package + runs parser fixture tests
-npm run zip           # builds dist/YT_Metadata_Pro_Extension.zip
-shasum -a 256 dist/YT_Metadata_Pro_Extension.zip
-```
+> **Updates are manual.** Unpacked extensions do not auto-update. Re-download or `git pull`,
+> then click the reload icon on the extension in `chrome://extensions/` and reload your
+> YouTube tabs.
 
 ---
 
@@ -184,6 +164,8 @@ shasum -a 256 dist/YT_Metadata_Pro_Extension.zip
 - **No API key.** Nothing to configure, nothing to leak.
 - **One permission:** `storage`, used for the local identification cache.
 - **One site:** the content script runs only on `www.youtube.com`.
+- **Nothing downloaded.** It never fetches video or audio, and it doesn't bypass YouTube's
+  limits, permissions or controls.
 
 The only network requests are to YouTube itself, from your own browser, for public page data.
 
@@ -206,9 +188,6 @@ same-origin requests, so it does not need broad host access.
 - **Best-effort.** The extension reads a YouTube endpoint that is not a documented public API.
   It can change without notice. If it stops working, the extension fails quietly — it will not
   break YouTube pages.
-- **Content ID matches recordings, not songs.** The official version of a track is often
-  identified while a vinyl pressing, B-side or remix of the same song is not. That is expected
-  behaviour, not a bug — it is usually the distinction you are looking for.
 - **Shorts aren't badged.** YouTube doesn't include the music section for Shorts, so there is
   nothing to read. Playlists, mixes and ads are skipped too.
 - **Desktop site only.** The mobile site (`m.youtube.com`) and YouTube Music aren't covered.
@@ -233,8 +212,9 @@ If badges do not appear:
 
 ## Development
 
-The extension lives in `extension/` and is plain MV3 — no build step, no bundler, no
-dependencies:
+The extension is plain JavaScript, CSS and HTML — **no build step, no bundler, no
+dependencies and no minification**. The files in `extension/` are the files Chrome runs, so
+you can read everything that executes.
 
 ```text
 extension/manifest.json
@@ -245,16 +225,20 @@ extension/popup.js
 extension/badge.css
 ```
 
+```bash
+npm run lint     # validate the package + run the parser tests against real captured responses
+npm run zip      # build dist/YT_Metadata_Pro_Extension.zip
+shasum -a 256 dist/YT_Metadata_Pro_Extension.zip
+```
+
+The ZIP is byte-reproducible: building it from a release tag gives exactly the file attached
+to that release, so the hash should match the one on the release page.
+
 Check any video from the command line:
 
 ```bash
 node scripts/detect-identified.mjs dQw4w9WgXcQ
 node scripts/detect-identified.mjs --hl de dQw4w9WgXcQ   # as a German-language user would see it
-```
-
-```bash
-npm run lint     # validate package + parser fixture tests
-npm run zip      # build dist/YT_Metadata_Pro_Extension.zip
 ```
 
 Packaging and release notes: [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md)
